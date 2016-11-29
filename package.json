@@ -1,0 +1,25 @@
+{
+  "name": "the-trust-project",
+  "version": "1.0.0",
+  "description": "BBC Trust Hackathon",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --recursive"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/trinitymirror-ondemand/the-trust-project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/trinitymirror-ondemand/the-trust-project#readme",
+  "dependencies": {
+    "express": "^4.14.0",
+    "highland": "^2.10.1",
+    "ramda": "^0.22.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0"
+  }
+}
