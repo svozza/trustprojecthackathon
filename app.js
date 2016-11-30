@@ -27,7 +27,9 @@ app.get('/', (req, res) => {
 });
 
 app.post('/api/validate', (req, res) => {
+    console.log(req.body.url);
     hl(request.get(req.body.url).then(x => {
+        console.log(x)
         return R.prop('text')(x)
     }))
         .map(html => {

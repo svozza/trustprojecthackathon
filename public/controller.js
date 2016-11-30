@@ -15,7 +15,8 @@ app.controller("trustProjectController", function($scope) {
     $.ajax({
       type: "POST",
       url: endPoint,
-      data: URL,
+      data: { url: URL },
+      dataType: 'JSON',
       success: function (data) {
         window.console.log("Data Sent: " + JSON.stringify(data));
         apiData = data;
