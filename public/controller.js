@@ -1,4 +1,6 @@
 var app = angular.module("trustProject", []);
+var map;
+var apiData = {};
 
 app.controller("trustProjectController", function($scope) {
 
@@ -27,7 +29,9 @@ app.controller("trustProjectController", function($scope) {
       url: endPoint,
       data: URL,
       success: function (data) {
-        window.console.log("Data Sent: " + data);
+        window.console.log("Data Sent: " + JSON.stringify(data));
+        apiData = data;
+        updateMapLocations(apiData.author.locations);
       }
     });
   }
@@ -37,3 +41,25 @@ app.controller("trustProjectController", function($scope) {
   }
 
 });
+
+
+
+function initMap() {
+  map = new google.maps.Map(document.getElementById('map_canvas'), {
+    center: {lat: 0, lng: 0},
+    zoom: 2
+  });
+}
+
+function updateMapLocations(locations) {
+  console.info('updateMapLocations');
+  for (var i = 0; i < locations.length; i++) {
+    var coords = locations[i];
+    var latLng = new google.maps.LatLng(coords.latitude,coords.longitude);
+    var marker = new google.maps.Marker({
+      position: latLng,
+      map: map
+    });
+  }
+}
+
