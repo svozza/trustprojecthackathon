@@ -33,6 +33,7 @@ app.get('/', (req, res) => {
 app.post('/api/validate', (req, res) => {
     hl(request.get(`${JUICER_URL}/${sha1(req.body.url)}`).query({api_key: JUICER_API_KEY}).then(R.prop('body')))
         .map(article => {
+            if(article.id === null) return {fake: true};
             const {title, published, url, authors} = article;
             const author = authorsDB[R.head(authors)];
             return {
@@ -49,6 +50,7 @@ app.post('/api/validate', (req, res) => {
             }
         })
         .flatMap(article => {
+            if(article.fake) return hl.of(article);
             return hl(request.get(HIVE_URL).query({auth: 'trust'}).query({author: article.author.name})
                 .then(R.prop('body')))
                 .map(data => {
