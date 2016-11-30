@@ -35,7 +35,7 @@ app.post('/api/validate', (req, res) => {
         .map(article => {
             if(article.id === null) return {fake: true};
             const {title, published, url, authors} = article;
-            const author = authorsDB[R.head(authors)];
+            const author = authorsDB[R.head(authors)] || {};
             return {
                 article: {
                     title,
@@ -51,18 +51,20 @@ app.post('/api/validate', (req, res) => {
         })
         .flatMap(article => {
             if(article.fake) return hl.of(article);
-            return hl(request.get(HIVE_URL).query({auth: 'trust'}).query({author: article.author.name})
+            return hl(request.get(HIVE_URL).query({auth: 'trust'}).query({author: article.author.name || ''})
                 .then(R.prop('body')))
                 .map(data => {
                     const locations = R.pathOr([], ['aggregations', 'geohash_1', 'geohash_2', 'geohash_3', 'buckets'], data);
                     return R.assocPath(['author', 'locations'], R.map(R.compose(R.pick(['longitude', 'latitude']), geohash.decode, R.prop('key')), locations), article);
                 });
         })
-        .map(article => {
-            return R.assoc(['organisation'], {organisation: organisationsDB['mirror']}, article);
+        .map(validation => {
+            const match = R.match(/[A-Za-z0-9](?:[A-Za-z0-9\-]{0,61}[A-Za-z0-9])?/g, R.pathOr('', ['article', 'url'], validation));
+            return R.assoc(['organisation'], organisationsDB[match[2]], validation);
         })
         .toCallback((err, data) => {
             if(err != null) {
+                console.log(err);
                 if(err.status != null) res.send(err.status, err.message);
                 else res.send(500, err)
             }
