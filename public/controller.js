@@ -6,20 +6,7 @@ app.controller("trustProjectController", function($scope) {
 
   $scope.inputSearch = '';
   $scope.alertMessage = false;
-
-  $scope.trackClick = function() {
-
-    var validateURL = validateUrl($scope.inputSearch);
-
-    console.log(validateURL);
-
-    if (!validateURL) {
-      $scope.alertMessage = true;
-    } else {
-      requestConfig($scope.inputSearch);
-      $scope.alertMessage = false;
-    }
-  }
+  $scope.showMessage = false;
 
   function requestConfig(URL) {
     var endPoint = "/api/validate";
@@ -40,9 +27,23 @@ app.controller("trustProjectController", function($scope) {
     return /^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(value);
   }
 
+  $scope.trackClick = function() {
+
+    var validateURL = validateUrl($scope.inputSearch);
+
+    console.log(validateURL);
+
+    if (!validateURL) {
+      $scope.alertMessage = true;
+      $scope.showMessage = false;
+    } else {
+      requestConfig($scope.inputSearch);
+      $scope.showMessage = true;
+      $scope.alertMessage = false;
+    }
+  }
+
 });
-
-
 
 function initMap() {
   map = new google.maps.Map(document.getElementById('map_canvas'), {
