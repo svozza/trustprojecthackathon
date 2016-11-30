@@ -1,0 +1,20 @@
+{
+  "mirror": {
+    "name": "The Mirror",
+    "privacy": "http://www.mirror.co.uk/privacy-statement",
+    "funding": null,
+    "retractions": "http://www.mirror.co.uk/corrections-clarifications",
+    "sourcing": null,
+    "mission": "http://www.trinitymirror.com/our-values",
+    "ethics": null
+  },
+  "newstatesman": {
+    "name": "The New Statesman",
+    "privacy": "http://www.newstatesman.com/privacy-policy",
+    "funding": null,
+    "retractions": "http://www.mirror.co.uk/corrections-clarifications",
+    "sourcing": null,
+    "mission": "http://www.trinitymirror.com/our-values",
+    "ethics": null
+  }
+}
