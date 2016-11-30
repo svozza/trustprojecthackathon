@@ -7,6 +7,7 @@ app.controller("trustProjectController", function($scope) {
   $scope.inputSearch = '';
   $scope.alertMessage = false;
   $scope.showMessage = false;
+  $scope.fakeArticle = false;
   $scope.apiData;
 
   function requestConfig(URL) {
@@ -18,11 +19,19 @@ app.controller("trustProjectController", function($scope) {
       data: { url: URL },
       dataType: 'JSON',
       success: function (data) {
+        if (data.fake) {
+          $scope.fakeArticle = true;
+          $scope.showMessage = false;
+          $scope.$apply();
+          return;
+        }
+
         window.console.log("Data Sent: " + JSON.stringify(data));
         apiData = data;
         $scope.apiData = data;
         updateMapLocations(apiData.author.locations);
         $scope.showMessage = false;
+        $scope.fakeArticle = false;
         $scope.$apply();
         window.google.maps.event.trigger(map, 'resize');
       }

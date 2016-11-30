@@ -25,11 +25,15 @@ body {
 
 #wrapper {
     padding-left: 0;
+    height: 100%;
 }
 
 #page-wrapper {
     width: 100%;
     padding: 0;
+    background-color: #fff;
+}
+body {
     background-color: #fff;
 }
 
@@ -42,6 +46,10 @@ body {
     #page-wrapper {
         padding: 10px;
     }
+}
+
+.page-header h1 {
+    font-style: italic;
 }
 
 /* Top Navigation */

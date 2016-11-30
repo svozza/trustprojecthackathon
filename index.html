@@ -43,14 +43,14 @@
             <!-- Page content -->
 
             <div class="page-header">
-                <!--<h1>Trust Project Validator</h1>-->
+                <!--<h1>How this site works</h1>-->
             </div>
 
             <p class="lead">Everybody is now a publisher - so what news can you trust? Check links to help you read the signs. This experimental tool is part of the <a href="http://thetrustproject.org/" target="_blank"> Trust Project. </a></p>
 
-            <div class="alert alert-info">
-                <strong>Heads up!</strong> This alert needs your attention, but it's not super important.
-            </div>
+            <p class="lead">TrustHound aims to provide you with information about the publisher and the writer of any news article or website. This should help you make an informed decision about how much trust you put in the article - or whether you have sniffed out Fake News.</p>
+
+            <p class="lead">Some news websites are part of the Trust Project, providing extra information in set categories as part of industry best practice. Sites that are not part of the Trust Project will be checked using open sources on the internet.</p>
             
             <div class="panel panel-primary">
                 <div class="panel-heading">
@@ -75,7 +75,18 @@
                 <i class="fa fa-spinner fa-spin fa-3x" aria-hidden="true"></i>
             </div>
 
+            <div ng-show="fakeArticle">
 
+                <div class="well">
+                    <p>This looks like a fake piece by a newly registered site which also publishes on 2 social media sites.
+                        This organisation has a negative trust rating. This organisation does not use the Trust Protocol.
+                        The author of this piece is not disclosed, and thus any content should be treated with extreme caution..</p>
+                </div>
+
+                <div class="alert alert-danger">
+                    <strong>Warning!</strong> This website is suspected of producing misleading and/or unverified content. Do not trust content on this site without further verification.
+                </div>
+            </div>
 
 
             <div ng-show="apiData">
