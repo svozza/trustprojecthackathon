@@ -67,87 +67,90 @@
             </div>
 
             <div class="alert alert-success" ng-show="showMessage">
-                <strong>Hold on!</strong> We are validating your article..
+                <p><strong>Hold on!</strong> We are validating your article..</p>
+                <i class="fa fa-spinner fa-spin fa-3x" aria-hidden="true"></i>
             </div>
 
 
 
-            <div class="page-header">
-                <h1>Results</h1>
-            </div>
-            <!--<div class="progress">-->
-                <!--<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"><span class="sr-only">60% Complete</span>-->
-                <!--</div>-->
-            <!--</div>-->
 
-            <div class="well">
-                <p>This looks like a comment piece by a mainstream site which also publishes on 12 social media sites and 3 other platforms.</p>
+            <div ng-show="apiData">
+
+                <div class="page-header">
+                    <h1>Results</h1>
+                </div>
+
+                <div class="well">
+                    <p>This looks like a comment piece by a mainstream site which also publishes on 12 social media sites and 3 other platforms.</p>
+                </div>
+
+                <div class="row" >
+                    <div class="col-lg-12">
+                        <div class="panel panel-yellow">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-long-arrow-right"></i> Article Details</h3>
+                            </div>
+                            <div class="panel-body">
+                                <p><strong>Title:</strong> {{apiData.article.title}} </p>
+                                <p><strong>Published date:</strong> {{apiData.article.published}}</p>
+                                <p><a ng-href="{{apiData.article.url}}" target="_blank">Article URL <i class="fa fa-arrow-circle-right"></i></a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="panel panel-green">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-edit"></i> Author</h3>
+                            </div>
+                            <div class="panel-body">
+                                <figure>
+                                    <img ng-src="{{apiData.author.photo}}">
+                                </figure>
+                                <div class="info">
+                                    <p>{{apiData.author.name}}</p>
+                                    <a ng-href="{{apiData.author.id}}" target="_blank">Twitter Account <i class="fa fa-arrow-circle-right"></i></a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Analysis</h3>
+                            </div>
+                            <div class="panel-body">
+                                <p><i class="fa fa-arrow-circle-right"></i> This organisation has a high trust rating. This organisation uses the Trust Protocol.</p>
+                                <p><i class="fa fa-arrow-circle-right"></i> This author has specialist knowledge which suggests they have expertise on this subject.</p>
+                                <p><i class="fa fa-arrow-circle-right"></i> This author writes for multiple outlets so may be a freelance or agency reporter.</p>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="panel panel-yellow">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-long-arrow-right"></i> Author Location History</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div id="map_canvas"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             <!--<div class="alert alert-success">-->
                 <!--This looks like a comment piece by a mainstream site which also publishes on 12 social media sites and 3 other platforms.-->
             <!--</div>-->
 
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="panel panel-yellow">
-                        <div class="panel-heading">
-                            <h3 class="panel-title"><i class="fa fa-long-arrow-right"></i> Article Details</h3>
-                        </div>
-                        <div class="panel-body">
-                            <p><strong>Title:</strong> Lions' spirit should fill us with pride as striking teaching assistants shame Labour council that's lost moral compass.</p>
-                            <p><strong>Published date:</strong> 2016-11-27T22:43:46Z</p>
-                            <p><a href="http://www.mirror.co.uk/news/uk-news/lions-spirit-should-fill-pride-9349587" target="_blank">Article URL <i class="fa fa-arrow-circle-right"></i></a></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="panel panel-green">
-                        <div class="panel-heading">
-                            <h3 class="panel-title"><i class="fa fa-edit"></i> Author</h3>
-                        </div>
-                        <div class="panel-body">
-                            <figure>
-                                <img src="http://i2.mirror.co.uk/incoming/article2876475.ece/ALTERNATES/s98/PROFILE-Kevin-Maguire.png">
-                            </figure>
-                            <div class="info">
-                                <p>Kevin Maguire</p>
-                                <a href="https://twitter.com/Kevin_Maguire" target="_blank">Twitter Account <i class="fa fa-arrow-circle-right"></i></a>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="panel panel-success">
-                        <div class="panel-heading">
-                            <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Analysis</h3>
-                        </div>
-                        <div class="panel-body">
-                            <p><i class="fa fa-arrow-circle-right"></i> This organisation has a high trust rating. This organisation uses the Trust Protocol.</p>
-                            <p><i class="fa fa-arrow-circle-right"></i> This author has specialist knowledge which suggests they have expertise on this subject.</p>
-                            <p><i class="fa fa-arrow-circle-right"></i> This author writes for multiple outlets so may be a freelance or agency reporter.</p>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="panel panel-yellow">
-                        <div class="panel-heading">
-                            <h3 class="panel-title"><i class="fa fa-long-arrow-right"></i> Author Location History</h3>
-                        </div>
-                        <div class="panel-body">
-                            <div id="map_canvas"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <!--<div class="alert alert-info">-->
                 <!--<strong>Heads up!</strong> This alert needs your attention, but it's not super important.-->
@@ -177,8 +180,6 @@
                     <!--</div>-->
                 <!--</div>-->
             <!--</div>-->
-
-
 
 
 

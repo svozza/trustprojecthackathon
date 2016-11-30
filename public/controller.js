@@ -7,6 +7,7 @@ app.controller("trustProjectController", function($scope) {
   $scope.inputSearch = '';
   $scope.alertMessage = false;
   $scope.showMessage = false;
+  $scope.apiData;
 
   function requestConfig(URL) {
     var endPoint = "/api/validate";
@@ -18,7 +19,11 @@ app.controller("trustProjectController", function($scope) {
       success: function (data) {
         window.console.log("Data Sent: " + JSON.stringify(data));
         apiData = data;
+        $scope.apiData = data;
         updateMapLocations(apiData.author.locations);
+        $scope.showMessage = false;
+        $scope.$apply();
+        window.google.maps.event.trigger(map, 'resize');
       }
     });
   }
@@ -30,8 +35,6 @@ app.controller("trustProjectController", function($scope) {
   $scope.trackClick = function() {
 
     var validateURL = validateUrl($scope.inputSearch);
-
-    console.log(validateURL);
 
     if (!validateURL) {
       $scope.alertMessage = true;
@@ -53,7 +56,6 @@ function initMap() {
 }
 
 function updateMapLocations(locations) {
-  console.info('updateMapLocations');
   for (var i = 0; i < locations.length; i++) {
     var coords = locations[i];
     var latLng = new google.maps.LatLng(coords.latitude,coords.longitude);
