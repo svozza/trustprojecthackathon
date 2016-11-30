@@ -51,8 +51,13 @@ app.controller("trustProjectController", function($scope) {
 
 function initMap() {
   map = new google.maps.Map(document.getElementById('map_canvas'), {
-    center: {lat: 0, lng: 0},
-    zoom: 2
+    center: {lat: 43.907787, lng: -79.359741},
+    zoom: 2,
+    scrollwheel: false,
+    navigationControl: true,
+    mapTypeControl: true,
+    scaleControl: true,
+    draggable: true
   });
 }
 
