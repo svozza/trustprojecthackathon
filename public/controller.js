@@ -57,13 +57,28 @@ function initMap() {
 }
 
 function updateMapLocations(locations) {
-  for (var i = 0; i < locations.length; i++) {
-    var coords = locations[i];
-    var latLng = new google.maps.LatLng(coords.latitude,coords.longitude);
-    var marker = new google.maps.Marker({
+  // Create an array of alphabetical characters used to label the markers.
+  var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+  var markers = locations.map(function(location, i) {
+    var latLng = new google.maps.LatLng(location.latitude,location.longitude);
+    return new google.maps.Marker({
       position: latLng,
-      map: map
+      label: labels[i % labels.length]
     });
-  }
+  });
+
+  // Add a marker clusterer to manage the markers.
+  var markerCluster = new MarkerClusterer(map, markers,
+      {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+
+  //for (var i = 0; i < locations.length; i++) {
+  //  var coords = locations[i];
+  //  var latLng = new google.maps.LatLng(coords.latitude,coords.longitude);
+  //  var marker = new google.maps.Marker({
+  //    position: latLng,
+  //    map: map
+  //  });
+  //}
 }
 
