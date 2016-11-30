@@ -4,6 +4,7 @@
   "description": "BBC Trust Hackathon",
   "main": "app.js",
   "scripts": {
+    "start": "node app.js",
     "test": "mocha --recursive"
   },
   "repository": {
