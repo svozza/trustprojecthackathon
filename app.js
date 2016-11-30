@@ -4,15 +4,19 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const hl = require('highland');
 const R = require('ramda');
+const sha1 = require('sha1');
 const cheerio = require('cheerio');
 const tz = require('timezone/loaded');
 const path = require('path');
 const request = require('superagent');
 const geohash = require('ngeohash');
+const authorsDB = require('./data/authors');
+const organisationsDB = require('./data/organisations');
 
 // Constants
 const PORT = process.env.PORT || 2327;
-//const JUICER_API_KEY = 'iCNGx8l4R3Pf2ge9itNAvz3MXOVK9lyG';
+const JUICER_API_KEY = 'iCNGx8l4R3Pf2ge9itNAvz3MXOVK9lyG';
+const JUICER_URL = 'http://juicer.api.bbci.co.uk/articles';
 const HIVE_URL = 'https://hivealpha.com/api/author-info';
 
 const app = express();
@@ -23,49 +27,37 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname + '/index.html'));
+    res.sendFile(path.join(__dirname + '/index.html'));
 });
 
 app.post('/api/validate', (req, res) => {
-    console.log(req.body.url);
-    hl(request.get(req.body.url).then(x => {
-        console.log(x)
-        return R.prop('text')(x)
-    }))
-        .map(html => {
-            const $ = cheerio.load(html);
-            const authorLink = $('[rel="author"]');
-            return authorLink.text();
-        })
-        .flatMap(author => {
-            return hl(request.get(HIVE_URL).query({auth: 'trust'}).query({author: author})
-                    .then(R.prop('body')));
-        })
-        .map(data => {
-            const locations = R.pathOr([], ['aggregations', 'geohash_1', 'geohash_2', 'geohash_3', 'buckets'], data);
-            const article = R.compose(R.propOr({}, '_source'), R.head, R.pathOr([], ['hits', 'hits']))(data);
+    hl(request.get(`${JUICER_URL}/${sha1(req.body.url)}`).query({api_key: JUICER_API_KEY}).then(R.prop('body')))
+        .map(article => {
+            const {title, published, url, authors} = article;
+            const author = authorsDB[R.head(authors)];
             return {
                 article: {
-                    title: article.headline,
-                    published: tz(article.published, '%-d-%-m-%Y'),
-                    url: article.url
+                    title,
+                    published: tz(published, '%-d-%-m-%Y'),
+                    url
                 },
                 author: {
-                    name: article.author,
-                    id: 'https://twitter.com/Kevin_Maguire',
-                    photo: 'http://i2.mirror.co.uk/incoming/article2876475.ece/ALTERNATES/s98/PROFILE-Kevin-Maguire.png',
-                    locations: R.map(R.compose(R.pick(['longitude', 'latitude']), geohash.decode, R.prop('key')), locations)
-                },
-                organisation: {
-                    name: 'The Mirror',
-                    privacy: 'http://www.mirror.co.uk/privacy-statement',
-                    funding: null,
-                    retractions: 'http://www.mirror.co.uk/corrections-clarifications',
-                    sourcing: null,
-                    mission: 'http://www.trinitymirror.com/our-values',
-                    ethics: null
+                    name: R.head(authors),
+                    id: author.twitter,
+                    photo: author.photo
                 }
             }
+        })
+        .flatMap(article => {
+            return hl(request.get(HIVE_URL).query({auth: 'trust'}).query({author: article.author.name})
+                .then(R.prop('body')))
+                .map(data => {
+                    const locations = R.pathOr([], ['aggregations', 'geohash_1', 'geohash_2', 'geohash_3', 'buckets'], data);
+                    return R.assocPath(['author', 'locations'], R.map(R.compose(R.pick(['longitude', 'latitude']), geohash.decode, R.prop('key')), locations), article);
+                });
+        })
+        .map(article => {
+            return R.assoc(['organisation'], {organisation: organisationsDB['mirror']}, article);
         })
         .toCallback((err, data) => {
             if(err != null) {
