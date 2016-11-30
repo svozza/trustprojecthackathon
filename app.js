@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const hl = require('highland');
 const R = require('ramda');
 const cheerio = require('cheerio');
+const tz = require('timezone/loaded');
 const path = require('path');
 const request = require('superagent');
 const geohash = require('ngeohash');
@@ -26,7 +27,7 @@ app.get('/', (req, res) => {
 });
 
 app.post('/api/validate', (req, res) => {
-    hl(request.get(req.body.url + 'z').then(x => {
+    hl(request.get(req.body.url).then(x => {
         return R.prop('text')(x)
     }))
         .map(html => {
@@ -44,7 +45,7 @@ app.post('/api/validate', (req, res) => {
             return {
                 article: {
                     title: article.headline,
-                    published: article.published,
+                    published: tz(article.published, '%-d-%-m-%Y'),
                     url: article.url
                 },
                 author: {
